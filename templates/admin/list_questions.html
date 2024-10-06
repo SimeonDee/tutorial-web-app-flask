@@ -1,0 +1,69 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}
+    Dashboard
+{% endblock title %}
+
+{% block content %}
+<div class="content container">
+    <h2>Admin Page - <span style="color: rgb(21, 168, 58);">{{subject.name}}</span> </h2>
+    
+    <section style="border: 1px solid rgb(199, 191, 191); border-radius: 10px; padding: 20px; margin-top: 20px;">
+        <h4 style="text-align: center; padding-bottom: 30px; color:rgb(2, 2, 18)">Available Questions
+            for <span style="color: rgb(21, 168, 58);">{{subject.name}}</span>
+        </h4>
+        <hr>
+        <div style="text-align: right; margin: 15px 10px;">
+            <a class="btn btn-primary" style="border-radius: 10%; padding: 10px;" 
+                href="{{ url_for('add_question', subject_id=subject.id) }}?user=admin"> 
+                    + Add New Question
+            </a>
+        </div>
+        {% if questions %}
+            <div style="display: flex; align-content: space-around; overflow-y: scroll;">
+                <table class="table table-secondary table-striped table-hover center" style="width: 100%;">
+                    <tr>
+                        <th>S/No</th>
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Option 1</th>
+                        <th>Option 2</th>
+                        <th>Option 3</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for question in questions %}
+                        <tr>
+                            <td>{{loop.index}}</td>
+                            <td>{{question.question}}</td>
+                            <td>{{question.answer}}</td>
+                            <td>{{question.option1}}</td>
+                            <td>{{question.option2}}</td>
+                            <td>{{question.option3}}</td>
+                            <td>
+                                <a  style="margin-right: 20px;" href="{{url_for('update_subject_question', subject_id=subject.id, question_id=question.id)}}?user=admin">
+                                    <!-- <img class="text-light" src="{{ url_for('static', filename='images/pencil-square.svg')}}" alt="Update" style="width:32px; height:32px;margin-right:10px"> -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                    </svg>
+                                </a>
+        
+                                <a  style="margin-right: 10px;" class="text-danger" href="{{url_for('delete_subject_question', subject_id=subject.id, question_id=question.id)}}?user=admin">
+                                    <!-- <img src="{{ url_for('static', filename='images/trash3.svg')}}" alt="Update" style="width:32px; height:32px;margin-right:10px"> -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="red" class="bi bi-trash3" viewBox="0 0 16 16">
+                                        <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% else %}
+            <div>
+                <p>No saved question(s) yet for <span style="color: rgb(21, 168, 58);">{{subject.name}} </span> </p>
+            </div>
+        {% endif %}
+    </section>
+    
+</div>
+{% endblock content %}

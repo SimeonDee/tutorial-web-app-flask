@@ -1,0 +1,157 @@
+{% extends "quiz/quiz_base.html" %}
+{% block title %}
+    Quiz-Results
+{% endblock title %}
+
+{% block content %}
+
+
+<div class="content quiz-home" style="display: flexbox; flex-direction: column;">
+    {% if user %}
+    <!-- Javascript to receive jinja variables -->
+    <script>
+        let user_data = {{user|tojson}}
+        let subject_data = {{subject|tojson}}
+
+    </script>
+    {% endif %}
+
+    <div class="quiz-launch-wrapper">
+
+        <div>
+            <div>
+                <h3 style="text-align: center;">Tutorial Quiz on 
+                    <span style="color: rgb(21, 168, 58);">{{subject.name}}</span>
+                </h3>
+            </div>
+
+            <div style="text-align: center;">
+                <!-- <button id="btn-show-quiz" class="btn btn-primary" onclick="startQuiz();">Start Quiz</button> -->
+                <a href="{{url_for('show_next_subject_question', subject_id=subject.id)}}" id="btn-show-quiz" class="btn btn-primary" onclick="startQuiz();">Start Quiz</a>
+            </div>
+        </div>
+
+        {% if error_message %}
+            <div class="error" style="margin-top: 10px; margin-bottom: 10px;">
+                <p> {{error_message}} </p>
+            </div>
+            <!-- <script>
+                alert("{{error_message}}")
+            </script> -->
+        {% endif %}
+
+        {% if end %}
+        <script>
+            alert('No more question(s) for {{subject.name}}, click on "Submit" button to submit')
+        </script>
+        {% endif %}
+
+        {% if current_question %}
+        <div id="quiz-question-wrapper" class="quiz-question-wrapper" style="display: {{'block' if show or start else 'none'}};">
+            <form class="form" method="post" action="{{url_for('show_next_subject_question', subject_id=subject.id)}}">
+                <div class="card">
+                    
+                    <div class="card-header">
+                        <div id="question-number" style="font-size: 1.2em; font-weight: 500; text-align: center;"> 
+                            Question {{question_count}}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="question-parent">
+                            <div id="question-text" class="question-child" style="font-size: larger; font-weight: 600;">
+                                <!-- What is the product of 5 and 10? -->
+                                 {{ current_question.question }}
+                            </div>
+
+                            <div id="question-options" class="question-child">
+                                <div class="option-wrapper">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="submitted_answer" id="option1" 
+                                                value="{{current_question.random_options[0]}}">
+                                        <label class="form-check-label" for="option1" id="lbl-option1">
+                                            <!-- 25 -->
+                                            {{ current_question.random_options[0] }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="submitted_answer" id="option2" 
+                                                value="{{current_question.random_options[1]}}">
+                                        <label class="form-check-label" for="option2" id="lbl-option2">
+                                            <!-- 500 -->
+                                            {{ current_question.random_options[1] }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="submitted_answer" id="option3" 
+                                                value="{{current_question.random_options[2]}}">
+                                        <label class="form-check-label" for="option3" id="lbl-option3">
+                                            <!-- 100 -->
+                                            {{ current_question.random_options[2] }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="option-wrapper">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="submitted_answer" id="option4" 
+                                                value="{{current_question.random_options[3]}}">
+                                        <label class="form-check-label" for="option4" id="lbl-option4">
+                                            <!-- 50 -->
+                                            {{ current_question.random_options[3] }}
+                                        </label>
+                                    </div>
+                                </div>
+    
+                            </div>
+
+                            <!-- Secrets -->
+                             <input type="hidden" id="correct_answer" name="correct_answer" value="{{current_question.answer}}" />
+                             <input type="hidden" name="total_score" value="{{total_score if total_score else 0}}" />
+                             <input type="hidden" name="previous_questions" value="{{previous_questions if previous_questions else '[]'}}" />
+                             <input type="hidden" id="question_id" name="question_id" value="{{current_question.id}}" />
+                             <input type="hidden" id="question_count" name="question_count" value="{{question_count if question_count else 0}}" />
+                             <input type="hidden" id="random_options" name="random_options" value="{{current_question.random_options}}" />
+                        </div>
+                    </div>
+ 
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                            <button id="btn-next-que" type="submit" {{'disabled' if end else ''}}
+                                data-mdb-ripple-init class="btn btn-primary btn-lg">
+                                Next Question
+                            </button>
+
+                            <button id="btn-submit-answer" type="" style="margin-left: 35px;"
+                                data-mdb-button-init data-mdb-ripple-init class="btn btn-danger btn-lg">
+                                    Submit
+                            </button>
+                            
+                            <!-- <button id="btn-confirm-answer" style="margin-left: 35px;" onclick="alert('The correct answer is {{current_question.answer}}')"
+                                data-mdb-button-init data-mdb-ripple-init class="btn bg-success btn-lg">
+                                    Confirm Answer
+                            </button> -->
+
+                            <div class="btn bg-success btn-lg" style="margin-left: 35px; color: whitesmoke;" onclick="alert('The correct answer is {{current_question.answer}}')">
+                                Confirm Answer
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+        {% else %}
+        <div>
+            <p>No question(s) for {{subject.name}} yet.</p>
+        </div>
+        {% endif %}
+    </div>
+   
+    <!-- Custom Scripts -->
+     <script src="{{ url_for('static', filename='js/quiz_script.js')}}"> </script>
+</div>
+{% endblock content %}

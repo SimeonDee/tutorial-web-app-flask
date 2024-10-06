@@ -1,0 +1,48 @@
+{% extends "admin/admin_base.html" %}
+{% block title %}
+    New Subject
+{% endblock title %}
+
+{% block content %}
+<div class="content container">
+
+    <p style="text-align: right; margin: 20px;">
+        &lt; - Back to <a href="{{url_for('admin_index')}}"> <b>Admin Dashboard</b> </a>
+    </p>
+
+    <div class="form-wrapper">
+        <h1 class="form-title">Admin - Add New Subject</h1>
+
+        <p style="text-align: right; margin: 20px;">
+            &lt; - Back to <a href="{{url_for('list_subjects')}}?user=admin"> <b>Subjects</b> </a>
+        </p>
+        
+        {% if error_message %}
+            <div class="error" style="margin-top: 10px; margin-bottom: 10px;">
+                <p> {{error_message}} </p>
+            </div>
+        {% elif success %}
+            <div class="success-msg">
+                <p>{{subject_name}} added successfully</p>
+            </div>
+        {% endif %}
+
+        <form class="mx-1 mx-md-4" action="{{ url_for('list_subjects') }}?user=admin" method="post">
+
+            <div class="d-flex flex-row align-items-center mb-4">
+                <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                <div data-mdb-input-init class="form-outline flex-fill mb-0">
+                    <label class="form-label" for="name">Subject Name</label>
+                    <input type="text" id="name" value="{{name if name else ''}}" name="name" class="form-control" />
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Register</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+{% endblock content %}

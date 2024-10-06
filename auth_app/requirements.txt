@@ -1,0 +1,5 @@
+python-dotenv
+flask
+flask-SQLAlchemy
+flask-CORS
+flask-Mail

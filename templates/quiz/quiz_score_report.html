@@ -1,0 +1,88 @@
+{% extends "quiz/quiz_base.html" %}
+{% block title %}
+    Quiz-Results
+{% endblock title %}
+
+{% block content %}
+
+
+<div class="content quiz-home" style="display: flexbox; flex-direction: column;">
+    <div class="quiz-launch-wrapper">
+
+        <div>
+            <div>
+                <h3 style="text-align: center;">Your Score for the  
+                    <span style="color: rgb(21, 168, 58);">{{subject.name}}</span> Quiz
+                </h3>
+            </div>
+            <hr>
+        </div>
+
+        {% if error_message %}
+            <div class="error" style="margin-top: 10px; margin-bottom: 10px;">
+                <p> {{error_message}} </p>
+            </div>
+        {% endif %}
+
+        {% if result %}
+        <div id="quiz-question-wrapper" class="quiz-question-wrapper">
+               <div class="card">
+                    <div class="card-header">
+                        <div id="question-number" style="font-size: 1.2em; font-weight: 500; text-align: center;"> Results for the {{subject.name}} Quiz</div>
+                    </div>
+                    <div class="card-body">
+                        <table align="center" cellspacing="10px" cellpadding="5px">
+                            <tr>
+                                <th>Candidate:</th>
+                                <td>{{result.owner.fullname}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Subject:</th>
+                                <td>{{result.subject.name}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Your Score: </th>
+                                <td>{{result.score}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Total Score Obtainable: </th>
+                                <td>{{result.total_score}}</td>
+                            </tr>
+                            
+                            <tr>
+                                <th>Percentage (%):</th>
+                                <td>{{ percentage_score|string +'%' if percentage_score else 'N/A'}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+ 
+                    <div class="card-footer">
+                        <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4 noprint">
+                            <a href="{{url_for('index')}}" class="btn btn-primary btn-lg noprint"> &lt;&lt; Back Home</a>
+
+                            <button id="btn-submit-answer" type="button" style="margin-left: 35px;"
+                                onclick="print();" data-mdb-ripple-init class="btn btn-secondary btn-lg noprint">
+                                    Print
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+        {% else %}
+        <div>
+            <p>No question(s) for {{subject.name}} yet.</p>
+        </div>
+        {% endif %}
+    </div>
+   
+    <!-- Custom Scripts -->
+     <script src="{{ url_for('static', filename='js/quiz_script.js')}}"> </script>
+</div>
+{% endblock content %}
